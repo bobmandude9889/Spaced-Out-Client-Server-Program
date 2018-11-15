@@ -28,8 +28,9 @@ public class StreamManager {
 					try {
 						Packet packet = (Packet) input.readObject();
 						packet.onReceive(socket);
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
+					} catch (Exception e) {
+						System.out.println("Connection to " + socket.getInetAddress().getHostAddress() + " closed..");
+						break;
 					}
 				}
 			}).start();
