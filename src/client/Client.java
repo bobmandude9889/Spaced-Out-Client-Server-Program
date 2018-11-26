@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import packet.Packet;
+import packet.QueryPacket;
 
 public class Client {
 
@@ -24,6 +25,8 @@ public class Client {
 		StreamManager.init();
 		StreamManager.add(socket);
 
+		StreamManager.sendPacket(new QueryPacket("SELECT * FROM test"), socket);
+		
 		Scanner in = new Scanner(System.in);
 		while (true) {
 			String command = in.nextLine();
