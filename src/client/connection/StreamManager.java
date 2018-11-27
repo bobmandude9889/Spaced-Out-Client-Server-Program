@@ -31,10 +31,8 @@ public class StreamManager {
 					try {
 						Packet packet = (Packet) input.readObject();
 						packet.onReceive(socket);
-						if (CallbackManager.isActive()) {
-							PacketCallback<Object> callback = (PacketCallback<Object>) CallbackManager.getCallback(packet);
-							callback.resultReceived(packet.getResult());
-						}
+						PacketCallback<Object> callback = (PacketCallback<Object>) CallbackManager.getCallback(packet);
+						callback.resultReceived(packet.getResult());
 					} catch (Exception e) {
 						e.printStackTrace();
 						System.err.println("Error in packet reading. Connection closed to " + socket.getInetAddress().getHostAddress());

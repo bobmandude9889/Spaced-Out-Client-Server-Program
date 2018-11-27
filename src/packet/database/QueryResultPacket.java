@@ -1,4 +1,4 @@
-package packet.query;
+package packet.database;
 
 import java.net.Socket;
 import java.util.UUID;

@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 import client.connection.StreamManager;
 import packet.callback.CallbackManager;
-import packet.query.QueryPacket;
-import packet.query.StatementPacket;
+import packet.database.QueryPacket;
+import packet.database.StatementPacket;
 
 public class Client {
 
@@ -40,7 +40,12 @@ public class Client {
 				}), socket);
 				break;
 			case "i":
-				StreamManager.sendPacket(new StatementPacket(String.format("INSERT INTO test (test, test1) VALUES (\'%s\', %s)", splitCmd[1], splitCmd[2])), socket);
+				StreamManager.sendPacket(new StatementPacket(String.format("INSERT INTO test (test, test1) VALUES (\'%s\', %s)", splitCmd[1], splitCmd[2]), result -> {
+					if (result.success)
+						System.out.println("Succesful");
+					else
+						System.out.println("Error: " + result.error);
+				}), socket);
 				break;
 			default:
 				System.out.println("Unknown command.");

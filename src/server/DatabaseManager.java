@@ -32,18 +32,38 @@ public class DatabaseManager {
 	}
 	
 	public static void executeStatement(String statement) {
+		executeStatement(statement, null);
+	}
+	
+	public static void executeStatement(String statement, StatementResultCallback callback) {
 		runAsync(() -> {
 			Statement stmt;
 			try {
 				stmt = db.createStatement();
 				stmt.execute(statement);
 				stmt.close();
+				if (callback != null)
+					callback.statementExecuted(true, "");
 				System.out.println("Executed " + statement);
 			} catch (SQLException e) {
 				System.out.println("Statement failed: " + statement);
 				e.printStackTrace();
+				if (callback != null)
+					callback.statementExecuted(false, e.getMessage());
 			}
 		});
+	}
+	
+	public interface QueryResultCallback {
+
+		public void resultReceived(ResultSet result);
+		
+	}
+
+	public interface StatementResultCallback {
+		
+		public void statementExecuted(boolean success, String error);
+		
 	}
 	
 }
