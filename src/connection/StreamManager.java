@@ -1,4 +1,4 @@
-package server;
+package connection;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,8 +28,9 @@ public class StreamManager {
 					try {
 						Packet packet = (Packet) input.readObject();
 						packet.onReceive(socket);
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
+					} catch (Exception e) {
+						System.err.println("Error in packet reading. Connection closed to " + socket.getInetAddress().getHostAddress());
+						break;
 					}
 				}
 			}).start();
