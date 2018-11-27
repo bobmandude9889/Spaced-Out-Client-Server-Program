@@ -26,12 +26,24 @@ public class DatabaseManager {
 		});
 	}
 
-	public static void runQuery(String query, QueryResultCallback callback) {
+	public static void executeQuery(String query, QueryResultCallback callback) {
 		queryTasks.add(() -> {
 			try {
 				Statement stmt = db.createStatement();
 				ResultSet result = stmt.executeQuery(query);
 				callback.resultReceived(result);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
+	public static void executeStatement(String statement) {
+		queryTasks.add(() -> {
+			Statement stmt;
+			try {
+				stmt = db.createStatement();
+				stmt.execute(statement);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

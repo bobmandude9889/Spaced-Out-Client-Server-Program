@@ -5,8 +5,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import packet.CallbackManager;
 import packet.Packet;
 import packet.QueryPacket;
 
@@ -24,8 +26,18 @@ public class Client {
 		
 		StreamManager.init();
 		StreamManager.add(socket);
+		CallbackManager.init();
 
-		StreamManager.sendPacket(new QueryPacket("SELECT * FROM test"), socket);
+		
+		
+//		StreamManager.sendPacket(new QueryPacket("SELECT * FROM test", result -> {
+//			try {
+//				result.next();
+//				System.out.println(result.getString("test"));
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}), socket);
 		
 		Scanner in = new Scanner(System.in);
 		while (true) {

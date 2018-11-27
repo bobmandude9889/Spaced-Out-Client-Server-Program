@@ -3,13 +3,16 @@ package packet;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
-public class QueryResultPacket implements Packet{
+public class QueryResultPacket extends Packet {
 
 	ResultSet result;
+	UUID id;
 	
-	public QueryResultPacket(ResultSet result) {
+	public QueryResultPacket(ResultSet result, UUID id) {
 		this.result = result;
+		this.id = id;
 	}
 	
 	@Override

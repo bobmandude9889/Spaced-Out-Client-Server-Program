@@ -9,6 +9,7 @@ public class Server {
 		StreamManager.init();
 		ConnectionManager.init();
 		DatabaseManager.init();
+		//DatabaseManager.executeStatement("CREATE TABLE test (test varchar(30), test1 int); INSERT INTO test (test, test1) VALUES ('Hello world', 69)");
 	}
 	
 }

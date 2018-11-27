@@ -2,7 +2,7 @@ package packet;
 
 import java.net.Socket;
 
-public class TestPacket implements Packet{
+public class TestPacket extends Packet {
 
 	String var1;
 	
