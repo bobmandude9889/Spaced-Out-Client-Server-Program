@@ -1,4 +1,4 @@
-package packet;
+package packet.callback;
 
 public interface PacketCallback<T> {
 

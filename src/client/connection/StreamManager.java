@@ -1,4 +1,4 @@
-package connection;
+package client.connection;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.HashMap;
 
 import packet.Packet;
+import packet.callback.CallbackManager;
+import packet.callback.PacketCallback;
 
 public class StreamManager {
 
@@ -18,6 +20,7 @@ public class StreamManager {
 		inputs = new HashMap<>();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void add(final Socket socket) {
 		try {
 			outputs.put(socket, new ObjectOutputStream(socket.getOutputStream()));
@@ -28,7 +31,12 @@ public class StreamManager {
 					try {
 						Packet packet = (Packet) input.readObject();
 						packet.onReceive(socket);
+						if (CallbackManager.isActive()) {
+							PacketCallback<Object> callback = (PacketCallback<Object>) CallbackManager.getCallback(packet);
+							callback.resultReceived(packet.getResult());
+						}
 					} catch (Exception e) {
+						e.printStackTrace();
 						System.err.println("Error in packet reading. Connection closed to " + socket.getInetAddress().getHostAddress());
 						break;
 					}

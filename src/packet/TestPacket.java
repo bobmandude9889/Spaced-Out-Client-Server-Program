@@ -3,7 +3,8 @@ package packet;
 import java.net.Socket;
 
 public class TestPacket extends Packet {
-
+	private static final long serialVersionUID = 684943179934632606L;
+	
 	String var1;
 	
 	public TestPacket(String var1) {

@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.UUID;
 
-public abstract class Packet implements Serializable {
+import packet.callback.CallbackManager;
+import packet.callback.PacketCallback;
 
+public abstract class Packet implements Serializable {
+	private static final long serialVersionUID = 2297751571337367820L;
+	
 	public UUID id;
 
 	public abstract void onReceive(Socket socket);

@@ -1,7 +1,9 @@
-package packet;
+package packet.callback;
 
 import java.util.HashMap;
 import java.util.UUID;
+
+import packet.Packet;
 
 public class CallbackManager {
 
@@ -11,11 +13,18 @@ public class CallbackManager {
 		packets = new HashMap<>();
 	}
 	
-	protected static void register(Packet packet, PacketCallback<?> callback) {
+	public static void register(Packet packet, PacketCallback<?> callback) {
 		packets.put(packet.id, callback);
 	}
 	
+	public static boolean isActive() {
+		return packets != null;
+	}
+	
 	public static PacketCallback<?> getCallback(Packet packet) {
+		if (packets == null)
+			return null;
+		
 		if (packets.containsKey(packet.id))
 			return packets.get(packet.id);
 		return null;

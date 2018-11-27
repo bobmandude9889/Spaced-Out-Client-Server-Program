@@ -1,21 +1,20 @@
 package client;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import packet.CallbackManager;
-import packet.Packet;
-import packet.QueryPacket;
+import client.connection.StreamManager;
+import packet.callback.CallbackManager;
+import packet.query.QueryPacket;
+import packet.query.StatementPacket;
 
 public class Client {
 
 	static Socket socket;
 	
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		System.out.println("Starting client...");
 		try {
@@ -27,32 +26,24 @@ public class Client {
 		StreamManager.init();
 		StreamManager.add(socket);
 		CallbackManager.init();
-
-		
-		
-//		StreamManager.sendPacket(new QueryPacket("SELECT * FROM test", result -> {
-//			try {
-//				result.next();
-//				System.out.println(result.getString("test"));
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}), socket);
 		
 		Scanner in = new Scanner(System.in);
 		while (true) {
 			String command = in.nextLine();
-			String[] cmdArgs = command.substring(command.indexOf(" ") + 1).split(" ");
-			command = command.substring(0, command.indexOf(" "));
-			
-			try {
-				Class<?> packetClass = Class.forName("packet." + command);
-				Constructor<?>[] constructors = packetClass.getConstructors();
-				System.out.println(constructors[0].getParameterCount());
-				Packet packet = (Packet) constructors[0].newInstance(cmdArgs);
-				StreamManager.sendPacket(packet, socket);
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+			String[] splitCmd = command.split(" ");
+			switch (splitCmd[0]) {
+			case "t":
+				StreamManager.sendPacket(new QueryPacket("SELECT * FROM test", result -> {
+					while (result.next()) {
+						System.out.println(result.get("test") + " : " + result.get("test1"));
+					}
+				}), socket);
+				break;
+			case "i":
+				StreamManager.sendPacket(new StatementPacket(String.format("INSERT INTO test (test, test1) VALUES (\'%s\', %s)", splitCmd[1], splitCmd[2])), socket);
+				break;
+			default:
+				System.out.println("Unknown command.");
 			}
 		}
 	}
