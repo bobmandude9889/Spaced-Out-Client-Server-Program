@@ -1,17 +1,41 @@
 package server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class DatabaseManager {
 
 	static Connection db;
 	
-	public static void init() throws SQLException {
-		db = DriverManager.getConnection("jdbc:derby:database;username=admin;password=root");
+	public static void init() throws SQLException, FileNotFoundException {
+		System.out.println("Starting database manager...");
+		try {
+			db = DriverManager.getConnection("jdbc:derby:database;username=admin;password=root");
+		} catch (SQLException e) {
+			System.out.println("Could not connect to database. Trying to create one...");
+			db = DriverManager.getConnection("jdbc:derby:database;create=true;username=admin;password=root");
+			File sqlScript = new File(DatabaseManager.class.getResource("database.sql").getFile());
+			Scanner in = new Scanner(sqlScript);	
+			String script = "";
+			while (in.hasNextLine()) {
+				script += in.nextLine() + "\n";
+			}
+			System.out.println("Running script...");
+			String[] commands = script.split(";");
+			for (int i = 0; i < commands.length - 1; i++) {
+				String command = commands[i];
+				Statement stmt = db.createStatement();
+				System.out.println(command);
+				stmt.execute(command);
+			}
+			in.close();
+		}
 	}
 
 	private static void runAsync(Runnable run) {

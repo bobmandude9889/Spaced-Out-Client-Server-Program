@@ -1,4 +1,4 @@
-package packet.database;
+package server.packet.database;
 
 import java.io.Serializable;
 import java.sql.ResultSet;

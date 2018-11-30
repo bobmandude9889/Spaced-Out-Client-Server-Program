@@ -1,11 +1,11 @@
-package packet.database;
+package server.packet.database;
 
 import java.net.Socket;
 
-import packet.Packet;
-import packet.callback.PacketCallback;
 import server.DatabaseManager;
 import server.connection.StreamManager;
+import server.packet.Packet;
+import server.packet.callback.PacketCallback;
 
 public class StatementPacket extends Packet {
 	private static final long serialVersionUID = -6632728115371884641L;

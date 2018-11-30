@@ -1,9 +1,9 @@
-package packet.database;
+package server.packet.database;
 
 import java.net.Socket;
 import java.util.UUID;
 
-import packet.Packet;
+import server.packet.Packet;
 
 public class StatementResultPacket extends Packet {
 	private static final long serialVersionUID = 7326063493578713061L;

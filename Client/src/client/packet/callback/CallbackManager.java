@@ -1,9 +1,9 @@
-package packet.callback;
+package client.packet.callback;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-import packet.Packet;
+import client.packet.Packet;
 
 public class CallbackManager {
 
